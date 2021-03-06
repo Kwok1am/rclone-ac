@@ -8,12 +8,24 @@ jobs:
     - uses: actions/checkout@v2.1.0
     - name: Rclone Install
       run: curl https://rclone.org/install.sh | sudo bash
+    - name: Gclone Install
+      run: wget -qO- https://git.io/gclone.sh | sudo bash
     - name: Inject Rclone config
       run: |
         mkdir -p ~/.config/rclone/
         cat >  ~/.config/rclone/rclone.conf  << EOF
         ${{ secrets.RCLONE_CONF }}
         EOF
+        mkdir -p /home/runner/accounts/ 
+        cat >  /home/runner/accounts/1.json  << EOF
+        ${{ secrets.SA1_CONF }}
+        EOF
+        cat >  /home/runner/accounts/2.json  << EOF
+        ${{ secrets.SA2_CONF }}
+        EOF
+        cat >  /home/runner/accounts/3.json  << EOF
+        ${{ secrets.SA3_CONF }}
+        EOF
     - name: Rclone Synchronizing file
       run: |
-        rclone copy ${{ secrets.GD_PATH }}  sjsp:  -v  --cache-chunk-total-size 20G --transfers=8 --drive-chunk-size 256M
+        rclone copy ${{ secrets.FILE_PATH }}  -v  --cache-chunk-total-size 20G --transfers=8 --drive-chunk-size 256M
