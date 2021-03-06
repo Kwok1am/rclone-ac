@@ -28,4 +28,4 @@ jobs:
         EOF
     - name: Rclone Synchronizing file
       run: |
-        rclone copy gc:{1KO75hKgIeGIAQHJ06n6q41MJwDwkkjp6} sjsp:Movie  -v  --cache-chunk-total-size 20G --transfers=8 --drive-chunk-size 256M
+        gclone copy ${{ secrets.FILE_PATH }}  -v  --cache-chunk-total-size 20G --transfers=8 --drive-chunk-size 256M
