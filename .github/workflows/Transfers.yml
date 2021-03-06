@@ -7,9 +7,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2.1.0
     - name: Rclone Install
-      run: curl https://rclone.org/install.sh | sudo bash
-    - name: Gclone Install
-      run: wget -qO- https://git.io/gclone.sh | sudo bash
+      run: sudo wget https://github.com/xinxin8816/heroku-ariang-21vianet/blob/master/rclone.zip && unzip rclone.zip && mv rclone /usr/bin/
+    #curl https://rclone.org/install.sh | sudo bash
     - name: Inject Rclone config
       run: |
         mkdir -p ~/.config/rclone/
@@ -28,4 +27,4 @@ jobs:
         EOF
     - name: Rclone Synchronizing file
       run: |
-        gclone copy ${{ secrets.FILE_PATH }}  -v  --cache-chunk-total-size 20G --transfers=8 --drive-chunk-size 256M
+        rclone copy ${{ secrets.FILE_PATH }}  -v  --cache-chunk-total-size 20G --transfers=8 --drive-chunk-size 256M
