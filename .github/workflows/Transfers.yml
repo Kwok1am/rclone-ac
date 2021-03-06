@@ -7,7 +7,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2.1.0
     - name: Rclone Install
-      run: sudo wget -P /home/runner https://github.com/xinxin8816/heroku-ariang-21vianet/blob/master/rclone.zip && unzip /home/runner/rclone.zip && cd /home/runner && mv rclone /usr/bin/
+      run: |
+        curl -s https://api.myip.la/cn?json
+        #wget -qO- https://git.io/gclone.sh | sudo bash
+        wget https://github.com/xinxin8816/heroku-ariang-21vianet/raw/master/rclone.zip
+        unzip rclone.zip
+        sudo mv rclone /usr/bin/
+        chmod +x /usr/bin/rclone
     #curl https://rclone.org/install.sh | sudo bash
     - name: Inject Rclone config
       run: |
