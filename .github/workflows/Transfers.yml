@@ -16,4 +16,4 @@ jobs:
         EOF
     - name: Rclone Synchronizing file
       run: |
-        rclone copy ${{ secrets.GD_PATH }}  od: -v  --transfers=6
+        rclone copy ${{ secrets.GD_PATH }}  sjsp:  -v  --transfers=6
