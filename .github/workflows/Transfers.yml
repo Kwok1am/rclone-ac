@@ -8,8 +8,6 @@ jobs:
     - uses: actions/checkout@v2.1.0
     - name: Rclone Install
       run: |
-        curl -s https://api.myip.la/cn?json
-        #wget -qO- https://git.io/gclone.sh | sudo bash
         wget https://github.com/xinxin8816/heroku-ariang-21vianet/raw/master/rclone.zip
         unzip rclone.zip
         sudo mv rclone /usr/bin/
