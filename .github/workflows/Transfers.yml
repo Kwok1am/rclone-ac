@@ -1,0 +1,19 @@
+name: Transfers
+on:
+  workflow_dispatch:
+jobs:
+  AutoSyncProcess:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.1.0
+    - name: Rclone Install
+      run: curl https://rclone.org/install.sh | sudo bash
+    - name: Inject Rclone config
+      run: |
+        mkdir -p ~/.config/rclone/
+        cat >  ~/.config/rclone/rclone.conf  << EOF
+        ${{ secrets.RCLONE_CONF }}
+        EOF
+    - name: Rclone Synchronizing file
+      run: |
+        rclone copy ${{ secrets.GD_PATH }}  od: -v  --transfers=6
