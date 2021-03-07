@@ -1,0 +1,35 @@
+name: AutoDownloader
+on:
+  workflow_dispatch:
+jobs:
+  AutoDownloaderProcess:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.1.0
+    - name: Gclone Install
+      run: wget -qO- https://git.io/gclone.sh | sudo bash
+    - name: Aria2 Install
+      run: sudo apt install -y aria2
+    - name: Inject Rclone&Aria2 config
+      run: |
+        mkdir -p ~/.config/rclone/
+        cat >  ~/.config/rclone/rclone.conf  << EOF
+        ${{ secrets.RCLONE_CONF }}
+        EOF
+        mkdir -p ~/.aria2/
+        cat >  ~/.aria2/aria2.conf  << EOF
+        ${{ secrets.ARIA2_CONF }}
+        EOF
+        mkdir -p /home/runner/accounts/
+        cat >  /home/runner/accounts/1.json  << EOF
+        ${{ secrets.SA1_CONF }}
+        EOF
+        cat >  /home/runner/accounts/9.json  << EOF
+        ${{ secrets.SA9_CONF }}
+        EOF
+    - name: Aria2_Downloading_File
+      run: |
+        ${{ secrets.115_LINK }}
+    - name: Rclone Synchronizing file
+      run: |
+        gclone copy downloads gc:{} -v
