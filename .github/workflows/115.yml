@@ -1,4 +1,4 @@
-name: AutoDownloader
+name: 115Downloader
 on:
   workflow_dispatch:
 jobs:
@@ -29,7 +29,7 @@ jobs:
         EOF
     - name: Aria2_Downloading_File
       run: |
-        ${{ secrets.115_LINK }}
+        ${{ secrets.LINK_PATH }}
     - name: Rclone Synchronizing file
       run: |
         gclone copy downloads gc:{} -v
