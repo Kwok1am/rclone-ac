@@ -15,22 +15,17 @@ jobs:
         gunzip gclone_1.52.13_Linux_x86_64.gz
         sudo mv gclone_1.52.13_Linux_x86_64 /usr/bin/gclone
         chmod +x /usr/bin/gclone
-    #curl https://rclone.org/install.sh | sudo bash
+        sudo apt install unrar -y -q
     - name: Inject Rclone config
+      env:
+        RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
       run: |
+        wget -q https://github.com/$GITHUB_REPOSITORY/raw/main/accounts.rar
+        unrar -p'${{ secrets.RAR_PSWD }}' e accounts.rar ~/accounts/
+        index=`ls -l ~/accounts |grep "^-"|wc -l`
         mkdir -p ~/.config/rclone/
         cat >  ~/.config/rclone/rclone.conf  << EOF
-        ${{ secrets.RCLONE_CONF }}
-        EOF
-        mkdir -p /home/runner/accounts/ 
-        cat >  /home/runner/accounts/1.json  << EOF
-        ${{ secrets.SA1_CONF }}
-        EOF
-        cat >  /home/runner/accounts/2.json  << EOF
-        ${{ secrets.SA2_CONF }}
-        EOF
-        cat >  /home/runner/accounts/3.json  << EOF
-        ${{ secrets.SA3_CONF }}
+        ${RCLONE_CONF/1.json/$((RANDOM%$index+1)).json}
         EOF
     - name: Rclone Synchronizing file
       run: |
