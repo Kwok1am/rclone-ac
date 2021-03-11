@@ -1,4 +1,4 @@
-name: Transfers2
+name: Forum
 on:
   schedule:
     - cron: '0 */8 * * *'
