@@ -27,12 +27,12 @@ jobs:
         cat >  ~/.config/rclone/rclone.conf  << EOF
         ${RCLONE_CONF/1.json/$((RANDOM%$index+1)).json}
         EOF
+    - name: TD-SJ
+      run: |
+        gclone copy ${{ secrets.PHOTO2_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 30G --transfers=8 --drive-chunk-size 256M --onedrive-chunk-size 250M --max-backlog 1000 --size-only
+    - name: TD-OD
+      run: |
+        gclone copy ${{ secrets.PHOTO3_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 30G --transfers=8 --drive-chunk-size 256M --onedrive-chunk-size 250M --max-backlog 1000 --size-only
     - name: TD-USC
       run: |
         gclone copy ${{ secrets.PHOTO1_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 30G --transfers=16 --drive-chunk-size 128M --max-backlog 1000 --size-only
-    - name: TD-SJ
-      run: |
-        gclone copy ${{ secrets.PHOTO3_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 30G --transfers=8 --drive-chunk-size 256M --onedrive-chunk-size 250M --max-backlog 1000 --size-only
-    - name: TD-OD
-      run: |
-        gclone copy ${{ secrets.PHOTO2_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 30G --transfers=8 --drive-chunk-size 256M --onedrive-chunk-size 250M --max-backlog 1000 --size-only
