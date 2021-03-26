@@ -1,0 +1,38 @@
+name: Photo
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+jobs:
+  AutoSyncPhoto:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+    - uses: actions/checkout@v2.1.0
+    - name: Rclone Install
+      run: |
+        wget -q https://github.com/jonntd/gclone/releases/download/v1.52.13/gclone_1.52.13_Linux_x86_64.gz
+        gunzip gclone_1.52.13_Linux_x86_64.gz
+        sudo mv gclone_1.52.13_Linux_x86_64 /usr/bin/gclone
+        chmod +x /usr/bin/gclone
+        sudo apt install unrar -y -q
+    - name: Inject Rclone config
+      env:
+        RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+      run: |
+        wget -q https://github.com/$GITHUB_REPOSITORY/raw/main/accounts.rar
+        unrar -p'${{ secrets.RAR_PSWD }}' e accounts.rar ~/accounts/
+        index=`ls -l ~/accounts |grep "^-"|wc -l`
+        mkdir -p ~/.config/rclone/
+        cat >  ~/.config/rclone/rclone.conf  << EOF
+        ${RCLONE_CONF/1.json/$((RANDOM%$index+1)).json}
+        EOF
+    - name: TD-USC
+      run: |
+        gclone copy ${{ secrets.PHOTO1_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 30G --transfers=8 --drive-chunk-size 256M --onedrive-chunk-size 250M --max-backlog 1000 --size-only
+    - name: TD-SJ
+      run: |
+        gclone copy ${{ secrets.PHOTO3_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 30G --transfers=8 --drive-chunk-size 256M --onedrive-chunk-size 250M --max-backlog 1000 --size-only
+    - name: TD-OD
+      run: |
+        gclone copy ${{ secrets.PHOTO2_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 30G --transfers=8 --drive-chunk-size 256M --onedrive-chunk-size 250M --max-backlog 1000 --size-only
