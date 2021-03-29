@@ -29,4 +29,4 @@ jobs:
         EOF
     - name: Rclone Synchronizing file
       run: |
-        gclone copy ${{ secrets.FILE_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 25G --transfers=1 --drive-chunk-size 256M --onedrive-chunk-size 200M --max-backlog 1000 --size-only
+        gclone copy ${{ secrets.FILE_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 25G --transfers=10 --drive-chunk-size 256M --onedrive-chunk-size 100M --max-backlog 1000 --size-only
