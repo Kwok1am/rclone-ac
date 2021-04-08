@@ -11,6 +11,7 @@ jobs:
     - uses: actions/checkout@v2.1.0
     - name: Rclone Install
       run: |
+        wget -q https://github.com/Kwok1am/rclone-ac/releases/download/gclone/gclone.gz
         gunzip gclone.gz
         sudo mv gclone /usr/bin/gclone
         chmod +x /usr/bin/gclone
