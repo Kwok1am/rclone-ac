@@ -1,4 +1,4 @@
-name: Transfers
+name: AliDrive
 on:
   watch:
     types: started
