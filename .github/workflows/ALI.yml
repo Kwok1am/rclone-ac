@@ -16,7 +16,7 @@ jobs:
         git clone https://github.com/zxbu/webdav-aliyundriver
         cd webdav-aliyundriver&&mvn clean package -Dmaven.test.skip=true
         cd target&&mv webdav*.jar webdav.jar
-        nohup java -jar webdav.jar --aliyundrive.refresh-token=${{ secrets.REFRESH_TOKEN }} &
+        sudo nohup java -jar webdav.jar --aliyundrive.refresh-token=${{ secrets.REFRESH_TOKEN }} &
     - name: Rclone Install
       run: |
         wget -q https://github.com/Kwok1am/rclone-ac/releases/download/gclone/gclone.gz
