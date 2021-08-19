@@ -39,4 +39,4 @@ jobs:
         EOF
     - name: Rclone Synchronizing file
       run: |
-        gclone copy ${{ secrets.ALI_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 25G --transfers=8 --drive-chunk-size 256M  --max-backlog 1000
+        gclone copy ${{ secrets.ALI_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 20G --transfers=12 --drive-chunk-size 128M  --max-backlog 1000
