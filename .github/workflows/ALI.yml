@@ -1,0 +1,40 @@
+name: Transfers
+on:
+  watch:
+    types: started
+  workflow_dispatch:
+jobs:
+  AutoSyncProcess:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+    - uses: actions/checkout@v2.1.0
+    - name: Build AliDrive
+      env:
+        REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+      run: |
+        git clone https://github.com/zxbu/webdav-aliyundriver
+        cd webdav-aliyundriver&&mvn clean package -Dmaven.test.skip=true
+        cd target&&mv webdav*.jar webdav.jar
+        java -jar webdav.jar --aliyundrive.refresh-token="${{ secrets.REFRESH_TOKEN }}"
+    - name: Rclone Install
+      run: |
+        wget -q https://github.com/Kwok1am/rclone-ac/releases/download/gclone/gclone.gz
+        gunzip gclone.gz
+        sudo mv gclone /usr/bin/gclone
+        chmod +x /usr/bin/gclone
+        sudo apt install unrar -y -q
+    - name: Inject Rclone config
+      env:
+        RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+      run: |
+        wget -q https://github.com/$GITHUB_REPOSITORY/raw/main/accounts.rar
+        unrar -p'${{ secrets.RAR_PSWD }}' e accounts.rar ~/accounts/
+        index=`ls -l ~/accounts |grep "^-"|wc -l`
+        mkdir -p ~/.config/rclone/
+        cat >  ~/.config/rclone/rclone.conf  << EOF
+        ${RCLONE_CONF/1.json/$((RANDOM%$index+1)).json}
+        EOF
+    - name: Rclone Synchronizing file
+      run: |
+        gclone copy ${{ secrets.ALI_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 25G --transfers=8 --drive-chunk-size 256M  --max-backlog 1000
