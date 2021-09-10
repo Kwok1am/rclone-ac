@@ -42,4 +42,4 @@ jobs:
     - name: Rclone Synchronizing file
       run: |
         gclone lsd ali:
-        gclone copy ${{ secrets.ALI_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 20G --transfers=16 --drive-chunk-size 128M  --max-backlog 1000 --include "*FRDS*"
+        gclone copy ${{ secrets.ALI_PATH }}  --stats-log-level NOTICE -P --stats 30s --cache-chunk-total-size 20G --transfers=16 --drive-chunk-size 128M  --max-backlog 1000 --include "*1080p.NF.WEB.DDP*"
