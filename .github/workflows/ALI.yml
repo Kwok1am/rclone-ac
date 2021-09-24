@@ -30,6 +30,7 @@ jobs:
         RCLONE_CONF2: ${{ secrets.RCLONE_CONF2 }}
         RCLONE_CONF3: ${{ secrets.RCLONE_CONF3 }}
       run: |
+        curl ipinfo.io
         wget -q https://github.com/$GITHUB_REPOSITORY/raw/main/accounts.rar
         unrar -p'${{ secrets.RAR_PSWD }}' e accounts.rar ~/accounts/
         index=`ls -l ~/accounts |grep "^-"|wc -l`
