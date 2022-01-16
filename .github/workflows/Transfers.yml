@@ -19,6 +19,7 @@ jobs:
     - name: Inject Rclone config
       env:
         RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+        RCLONE_CONF3: ${{ secrets.RCLONE_CONF3 }}
       run: |
         wget -q https://github.com/$GITHUB_REPOSITORY/raw/main/accounts.rar
         unrar -p'${{ secrets.RAR_PSWD }}' e accounts.rar ~/accounts/
@@ -26,6 +27,7 @@ jobs:
         mkdir -p ~/.config/rclone/
         cat >  ~/.config/rclone/rclone.conf  << EOF
         ${RCLONE_CONF/1.json/$((RANDOM%$index+1)).json}
+        ${{ secrets.RCLONE_CONF3 }}
         EOF
     - name: Rclone Synchronizing file
       run: |
